@@ -10,8 +10,8 @@ const userSchema = new Schema<User>({
     type: String,
     requierd: true,
   },
-  friends: [{ type: Schema.Types.ObjectId, ref: 'Member' }],
-  enemies: [{ type: Schema.Types.ObjectId, ref: 'Member' }],
+  friends: [{ type: Schema.Types.ObjectId, ref: 'User' }],
+  enemies: [{ type: Schema.Types.ObjectId, ref: 'User' }],
 });
 
 userSchema.set('toJSON', {
