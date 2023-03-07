@@ -22,20 +22,20 @@ export class UsersMongoRepo implements Repo<User> {
 
   async query(): Promise<User[]> {
     debug('query');
-    const data = await UserModel.find();
+    const data = await UserModel.find()
+      .populate('friends', { friends: 0 })
+      .populate('enemies', { enemies: 0 })
+      .exec();
     return data;
   }
 
   async queryId(id: string): Promise<User> {
     debug('queryId');
-    const data = await UserModel.findById(id);
+    const data = await UserModel.findById(id)
+      .populate('friends', { friends: 0 })
+      .populate('enemies', { enemies: 0 })
+      .exec();
     if (!data) throw new HTTPError(404, 'Not found', 'ID not found in queryID');
-    return data;
-  }
-
-  async search(query: { key: string; value: unknown }) {
-    debug('search');
-    const data = await UserModel.find({ [query.key]: query.value });
     return data;
   }
 
@@ -49,7 +49,10 @@ export class UsersMongoRepo implements Repo<User> {
     debug('update');
     const data = await UserModel.findByIdAndUpdate(info.id, info, {
       new: true,
-    });
+    })
+      .populate('friends', { friends: 0 })
+      .populate('enemies', { enemies: 0 })
+      .exec();
     if (!data) throw new HTTPError(404, 'Not found', 'ID not found in update');
     return data;
   }
