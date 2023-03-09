@@ -1,16 +1,15 @@
 import { Response, Request, NextFunction } from 'express';
-import debug from 'debug';
 import { User } from '../entities/user.js';
 import { Repo } from '../repository/repo.interface.js';
-import { Auth, PayloadToken } from '../services/auth.js';
+import { Auth, PayloadToken } from '../helpers/auth.js';
 import { HTTPError } from '../errors/custom.error.js';
+import createDebug from 'debug';
+const debug = createDebug('W6:controller:users');
 
 export class UsersController {
   constructor(public repo: Repo<User>) {
     debug('Instantiate');
   }
-
-  // Métodos adicionales necesarios: eliminar/agregar amigos y enemigos
 
   async getAll(_req: Request, resp: Response, next: NextFunction) {
     try {
@@ -31,7 +30,8 @@ export class UsersController {
         throw new HTTPError(401, 'Unauthorized', 'Invalid Email or password');
       req.body.password = await Auth.hash(req.body.password);
 
-      req.body.things = [];
+      req.body.friends = [];
+      req.body.enemies = [];
 
       const data = await this.repo.create(req.body);
       resp.status(201);
@@ -39,6 +39,7 @@ export class UsersController {
         results: [data],
       });
     } catch (error) {
+      debug('Regiter failed');
       next(error);
     }
   }

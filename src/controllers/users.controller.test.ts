@@ -2,7 +2,7 @@ import { Response, Request } from 'express';
 import { User } from '../entities/user';
 import { Repo } from '../repository/repo.interface';
 import { UsersController } from './users.controller';
-import { Auth } from '../services/auth.js';
+import { Auth } from '../helpers/auth.js';
 
 jest.mock('../services/auth.js');
 
@@ -13,7 +13,7 @@ describe('Given UsersController', () => {
     search: jest.fn(),
     queryId: jest.fn(),
     update: jest.fn(),
-    destroy: jest.fn(),
+    remove: jest.fn(),
   }; // Con esto no pide mockear todas las funciones de Repo, aunque aqui no la usemos
 
   const req = {

@@ -3,6 +3,11 @@ import { config } from '../config.js';
 import bcrypt from 'bcryptjs';
 import { HTTPError } from '../errors/custom.error.js';
 
+import createDebug from 'debug';
+const debug = createDebug('W6:services:auth');
+
+debug('Loaded');
+
 const salt = 10;
 
 export interface PayloadToken extends jwt.JwtPayload {

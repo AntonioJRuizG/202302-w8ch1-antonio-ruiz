@@ -1,9 +1,9 @@
-import { Repo } from './repo.interface.js';
+import { Repo } from '../repo.interface.js';
 import createDebug from 'debug';
-import { User } from '../entities/user.js';
+import { User } from '../../entities/user.js';
 import { UserModel } from './user.mongo.model.js';
-import { HTTPError } from '../errors/custom.error.js';
-const debug = createDebug('W6:repo');
+import { HTTPError } from '../../errors/custom.error.js';
+const debug = createDebug('W6:users_repo');
 
 export class UsersMongoRepo implements Repo<User> {
   private static instance: UsersMongoRepo;
@@ -23,8 +23,7 @@ export class UsersMongoRepo implements Repo<User> {
   async query(): Promise<User[]> {
     debug('query');
     const data = await UserModel.find()
-      .populate('friends', { friends: 0 })
-      .populate('enemies', { enemies: 0 })
+      .populate('euphoniums', { euphoniums: 0 })
       .exec();
     return data;
   }
@@ -32,8 +31,7 @@ export class UsersMongoRepo implements Repo<User> {
   async queryId(id: string): Promise<User> {
     debug('queryId');
     const data = await UserModel.findById(id)
-      .populate('friends', { friends: 0 })
-      .populate('enemies', { enemies: 0 })
+      .populate('euphoniums', { euphoniums: 0 })
       .exec();
     if (!data) throw new HTTPError(404, 'Not found', 'ID not found in queryID');
     return data;
@@ -63,14 +61,14 @@ export class UsersMongoRepo implements Repo<User> {
     return data;
   }
 
-  async destroy(id: string): Promise<void> {
+  async remove(id: string): Promise<void> {
     debug('destroy');
     const data = await UserModel.findByIdAndDelete(id);
     if (!data)
       throw new HTTPError(
         404,
         'Not found',
-        'Delete not possible: id not found'
+        'Remove not possible: id not found'
       );
   }
 }

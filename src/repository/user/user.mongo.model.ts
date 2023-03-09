@@ -1,8 +1,12 @@
 import { model, Schema } from 'mongoose';
-import { User } from '../entities/user';
+import { User } from '../../entities/user';
 
 const userSchema = new Schema<User>({
   name: {
+    type: String,
+    requiered: true,
+  },
+  email: {
     type: String,
     requiered: true,
   },
@@ -10,8 +14,7 @@ const userSchema = new Schema<User>({
     type: String,
     requierd: true,
   },
-  friends: [{ type: Schema.Types.ObjectId, ref: 'User' }],
-  enemies: [{ type: Schema.Types.ObjectId, ref: 'User' }],
+  euphoniums: [{ type: Schema.Types.ObjectId, ref: 'Euphonium' }],
 });
 
 userSchema.set('toJSON', {
